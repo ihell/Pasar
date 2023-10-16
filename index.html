@@ -165,7 +165,7 @@
       onAuthStateChanged,
       GoogleAuthProvider,
     } from 'https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js';
-    import { konfigurasiFirebase } from '/pasar/konfigurasi-firebase.js';
+    import { konfigurasiFirebase } from '/Pasar/konfigurasi-firebase.js';
 
     const app = initializeApp(konfigurasiFirebase);
     const provider = new GoogleAuthProvider();
@@ -181,7 +181,7 @@
                 // The signed-in user info.
                 const user = result.user;
                 // ...
-                location.replace('/pasar/penjual/index.html');
+                location.replace('/Pasar/penjual/index.html');
               }).catch((error) => {
                 // Handle Errors here.
                 const errorCode = error.code;
