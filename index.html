@@ -29,6 +29,8 @@
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -148,12 +150,51 @@
 
   <footer class="py-3 bg-dark-subtle mt-auto">
     <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-      <li class="nav-item"><a href="/index.html" class="nav-link px-2 text-body-secondary">Beranda</a></li>
-      <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Menjadi penjual</a></li>
-      <li class="nav-item"><a href="/tentang.html" class="nav-link px-2 text-body-secondary">Tentang</a></li>
+      <li class="nav-item"><a href="/Pasar/index.html" class="nav-link px-2 text-body-secondary">Beranda</a></li>
+      <li class="nav-item"><a href="#" id="link-login-penjual" class="nav-link px-2 text-body-secondary">login penjual</a></li>
+      <li class="nav-item"><a href="/Pasar/tentang.html" class="nav-link px-2 text-body-secondary">Tentang</a></li>
     </ul>
     <p class="text-center text-body-secondary">&copy; 2023 Kamazone</p>
   </footer>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js';
+    import {
+      getAuth,
+      signInWithPopup,
+      signOut,
+      onAuthStateChanged,
+      GoogleAuthProvider,
+    } from 'https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js';
+    import { konfigurasiFirebase } from '/Pasar/konfigurasi-firebase.js';
+    
+    const app = initializeApp(konfigurasiFirebase);
+    const provider = new GoogleAuthProvider();
+    const auth = getAuth();
+
+    $(document).ready(function() {
+      $("#link-login-penjual").click(function() {
+        signInWithPopup(auth, provider)
+          .then((result) => {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const token = credential.accessToken;
+            // The signed-in user info.
+            const user = result.user;
+            // ...
+            location.replace('/Pasar/penjual/index.html');
+          }).catch((error) => {
+            // Handle Errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            // The email of the user's account used.
+            const email = error.customData.email;
+            // The AuthCredential type that was used.
+            const credential = GoogleAuthProvider.credentialFromError(error);
+            // ...
+          });
+      });
+    });
+  </script>
 
 </body>
 
