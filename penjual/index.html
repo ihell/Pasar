@@ -88,7 +88,7 @@
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js';
     import { konfigurasiFirebase } from '/Pasar/konfigurasi-firebase.js';
-    import { getFirestore, collection, addDoc } from "firebase/firestore";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
 
     const app = initializeApp(konfigurasiFirebase);
     const db = getFirestore(app);
@@ -102,7 +102,7 @@
 
       document.getElementById("contoh").innerHTML = barangRef.id;
     } catch (e) {
-      document.getElementById("contoh").innerHTML = e;
+      document.getElementById("contoh").innerHTML = er;
     }
   </script>
 </body>
