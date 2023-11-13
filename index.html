@@ -55,92 +55,9 @@
       <h1> kamazon </h1>
 
       <div Class="container-fluid">
-        <div class="row">
+        <div class="row" id="daftar-barang">
 
-          <div class="card">
-            <img src="https://picsum.photos/100/60" class="card-img-top">
-            <div class="card-body">
-              <span>Nama barang</span>
-            </div>
-          </div>
-          <div class="card">
-            <img src="https://picsum.photos/100/60" class="card-img-top">
-            <div class="card-body">
-              <span>Nama barang</span>
-            </div>
-          </div>
-          <div class="card">
-            <img src="https://picsum.photos/100/60" class="card-img-top">
-            <div class="card-body">
-              <span>Nama barang</span>
-            </div>
-          </div>
-          <div class="card">
-            <img src="https://picsum.photos/100/60" class="card-img-top">
-            <div class="card-body">
-              <span>Nama barang</span>
-            </div>
-          </div>
-          <div class="card">
-            <img src="https://picsum.photos/100/60" class="card-img-top">
-            <div class="card-body">
-              <span>Nama barang</span>
-            </div>
-          </div>
-          <div class="card">
-            <img src="https://picsum.photos/100/60" class="card-img-top">
-            <div class="card-body">
-              <span>Nama barang</span>
-            </div>
-          </div>
-          <div class="card">
-            <img src="https://picsum.photos/100/60" class="card-img-top">
-            <div class="card-body">
-              <span>Nama barang</span>
-            </div>
-          </div>
-          <div class="card">
-            <img src="https://picsum.photos/100/60" class="card-img-top">
-            <div class="card-body">
-              <span>Nama barang</span>
-            </div>
-          </div>
-          <div class="card">
-            <img src="https://picsum.photos/100/60" class="card-img-top">
-            <div class="card-body">
-              <span>Nama barang</span>
-            </div>
-          </div>
-          <div class="card">
-            <img src="https://picsum.photos/100/60" class="card-img-top">
-            <div class="card-body">
-              <span>Nama barang</span>
-            </div>
-          </div>
-          <div class="card">
-            <img src="https://picsum.photos/100/60" class="card-img-top">
-            <div class="card-body">
-              <span>Nama barang</span>
-            </div>
-          </div>
-          <div class="card">
-            <img src="https://picsum.photos/100/60" class="card-img-top">
-            <div class="card-body">
-              <span>Nama barang</span>
-            </div>
-          </div>
-          <div class="card">
-            <img src="https://picsum.photos/100/60" class="card-img-top">
-            <div class="card-body">
-              <span>Nama barang</span>
-            </div>
-          </div>
-          <div class="card">
-            <img src="https://picsum.photos/100/60" class="card-img-top">
-            <div class="card-body">
-              <span>Nama barang</span>
-            </div>
-          </div>
+
 
         </div>
       </div>
@@ -166,12 +83,44 @@
       GoogleAuthProvider,
     } from 'https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js';
     import { konfigurasiFirebase } from '/Pasar/konfigurasi-firebase.js';
-    
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+
     const app = initializeApp(konfigurasiFirebase);
     const provider = new GoogleAuthProvider();
     const auth = getAuth();
+    const db = getFirestore(app);
 
-    $(document).ready(function() {
+    async function ambilDaftarBarang() {
+      const querySnapshot = await getDocs(collection(db, "barang"));
+      let daftarBarang = [];
+      querySnapshot.forEach((doc) => {
+        daftarBarang.push({
+          id: doc.id,
+          nama: doc.data().nama,
+          harga: doc.data().harga,
+          foto: doc.data().foto
+        });
+      });
+
+      return daftarBarang;
+    }
+
+    $(document).ready(async function() {
+      let elDaftarBarang = $("#daftar-barang");
+
+      let kumpulanBarang = await ambilDaftarBarang();
+
+      kumpulanBarang.forEach((element) => {
+        elDaftarBarang.append(
+        '<div class="card">' +
+        '<img src="https://picsum.photo/100/68" class="card-img-top">' +
+        '<div class="card-body">' +
+        '<span>' + element.nama + ', ' + element.harga + '</span> 
+        '</div>' +
+        '</div>'
+        );
+      });
+
       $("#link-login-penjual").click(function() {
         signInWithPopup(auth, provider)
           .then((result) => {
