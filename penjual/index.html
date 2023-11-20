@@ -29,6 +29,8 @@
   </style>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -54,25 +56,25 @@
 
       <h3>tambah barang</h3>
 
-      <p id="contoh"></p>
-
       <form>
         <div class="mb-3">
           <label class="form-label">Nama</label>
-          <input type="text" class="form-control">
+          <input type="text" class="form-control" id="nama-barang">
         </div>
         <div class="mb-3">
           <label class="form-label">Harga</label>
-          <input type="text" class="form-control">
+          <input type="text" class="form-control" id="harga-barang">
         </div>
         <div class="mb-3">
           <label class="form-label">Foto / Gambar</label>
           <input type="file" class="form-control">
         </div>
         <div class="mb-3">
-          <button type="sumbit" class="btn btn-primary">Simpan</button>
+          <button type="sumbit" class="btn btn-primary" id="tombol-simpan">Simpan</button>
         </div>
       </form>
+
+      <p id="pesan"></p>
     </div>
 
   </div>
@@ -93,17 +95,24 @@
     const app = initializeApp(konfigurasiFirebase);
     const db = getFirestore(app);
 
-    try {
-      const barangRef = await addDoc(collection(db, "barang"), {
-        foto: "",
-        nama: "coklat",
-        harga: 35000
-      });
+    $(document).ready(function() {
+      let namaBarang = $("#nama-barang");
+      let hargaBarang = $("#harga-barang");
 
-      document.getElementById("contoh").innerHTML = barangRef.id;
-    } catch (e) {
-      document.getElementById("contoh").innerHTML = er;
-    }
+      $("#tombol-simpan").click(async function() {
+        try {
+          const barangRef = await addDoc(collection(db, "barang"), {
+            foto: "",
+            nama: namaBarang.val(),
+            harga: hargaBarang.val()
+          });
+
+          $("#pesan").html("Berhasil menambah barang " + namaBarang.val());
+        } catch (err) {
+          $("#pesan").html("Gagal menambah barang " + namaBarang.val() + err);
+        }
+      });
+    });
   </script>
 </body>
 
