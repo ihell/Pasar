@@ -67,7 +67,7 @@
         </div>
         <div class="mb-3">
           <label class="form-label">Foto / Gambar</label>
-          <input type="file" class="form-control"id"foto-b">
+          <input type="file" class="form-control"id"foto-barang">
         </div>
         <div class="mb-3">
           <button type="sumbit" class="btn btn-primary" id="tombol-simpan">Simpan</button>
@@ -107,7 +107,7 @@
         
         try {
           const barangRef = await addDoc(collection(db, "barang"), {
-            foto: namaBarang.val() + ."jpg",
+            foto: namaBarang.val() + ".jpg",
             nama: namaBarang.val(),
             harga: hargaBarang.val()
           });
