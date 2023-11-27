@@ -112,7 +112,7 @@
             harga: hargaBarang.val()
           });
           
-          const storage = getstorage ();
+          const storage = getStorage ();
           const storageRef = ref (storage,namaBarang.val() + ".jpg");
           
           await uploadBytes(storageRef, fotoBarang);
