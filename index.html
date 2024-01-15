@@ -90,7 +90,7 @@
     const provider = new GoogleAuthProvider();
     const auth = getAuth();
     const db = getFirestore(app);
-    cosnt storage = getStorage();
+    const storage = getStorage();
 
     async function ambilDaftarBarang() {
       const querySnapshot = await getDocs(collection(db, "barang"));
