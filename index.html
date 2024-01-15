@@ -84,21 +84,32 @@
     } from 'https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js';
     import { konfigurasiFirebase } from '/Pasar/konfigurasi-firebase.js';
     import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+    import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-storage.js";
 
     const app = initializeApp(konfigurasiFirebase);
     const provider = new GoogleAuthProvider();
     const auth = getAuth();
     const db = getFirestore(app);
+    cosnt storage = getStorage();
 
     async function ambilDaftarBarang() {
       const querySnapshot = await getDocs(collection(db, "barang"));
       let daftarBarang = [];
       querySnapshot.forEach((doc) => {
+        let namaFileFoto = doc.data().foto;
+
+        if (namaFileFoto != '') {
+          getDownloadURL(ref(storage, namaFileFoto))
+            .then((urlFoto) => {
+              const foto = document.getElementById(doc.id);
+              foto.setAttribute('src', urlFoto);
+            })
+        }
+
         daftarBarang.push({
           id: doc.id,
           nama: doc.data().nama,
           harga: doc.data().harga,
-          foto: doc.data().foto
         });
       });
 
@@ -112,12 +123,12 @@
 
       kumpulanBarang.forEach((element) => {
         elDaftarBarang.append(
-        '<div class="card">' +
-        '<img src="https://picsum.photo/100/68" class="card-img-top">' +
-        '<div class="card-body">' +
-        '<span>' + element.nama + ', ' + element.harga + '</span>' +
-        '</div>' +
-        '</div>'
+          '<div class="card">' +
+          '<img id="' + element.id + '" src="https://picsum.photo/100/68" class="card-img-top">' +
+          '<div class="card-body">' +
+          '<span>' + element.nama + ', ' + element.harga + '</span>' +
+          '</div>' +
+          '</div>'
         );
       });
 
